@@ -75,6 +75,7 @@ collision_mask = 15
 position = Vector2(2063, 1428)
 
 [node name="Hunter" parent="Enemies" index="2" instance=ExtResource("10_gpumj")]
+visible = false
 position = Vector2(288, 2183)
 collision_layer = 2
 collision_mask = 15
@@ -89,6 +90,7 @@ position = Vector2(-2257, 1410)
 rotation = -2.06937
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." index="13"]
+visible = false
 navigation_polygon = SubResource("NavigationPolygon_dxb8k")
 
 [connection signal="body_entered" from="Gates" to="." method="_on_area_2d_body_entered"]

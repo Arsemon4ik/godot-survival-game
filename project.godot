@@ -30,7 +30,7 @@ mouse_cursor/custom_image_hotspot=Vector2(17, 17)
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot-sqlite/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot-sqlite/plugin.cfg", "res://addons/godot_state_charts/plugin.cfg")
 
 [input]
 
