@@ -1,0 +1,94 @@
+[gd_scene load_steps=15 format=3 uid="uid://b2pr127aiwrhs"]
+
+[ext_resource type="PackedScene" uid="uid://bwy444lg70j40" path="res://scenes/level.tscn" id="1_lk2b1"]
+[ext_resource type="Script" path="res://scenes/outside.gd" id="2_5mpn8"]
+[ext_resource type="Texture2D" uid="uid://wvnq82hqa0lg" path="res://graphics/ground/stones.png" id="2_jp125"]
+[ext_resource type="PackedScene" uid="uid://ban0ltwsxiihx" path="res://scenes/house.tscn" id="4_jml0j"]
+[ext_resource type="PackedScene" uid="uid://cduv4misoidwp" path="res://scenes/item.tscn" id="5_8cwfi"]
+[ext_resource type="PackedScene" uid="uid://b26aalc4lcv6e" path="res://scenes/crate.tscn" id="6_n3uq7"]
+[ext_resource type="PackedScene" uid="uid://mvnh1cumtf1h" path="res://scenes/toilet.tscn" id="7_v4eyt"]
+[ext_resource type="PackedScene" uid="uid://hprgdiwuvrq0" path="res://scenes/scout.tscn" id="8_6fwux"]
+[ext_resource type="PackedScene" uid="uid://btrnagli171wr" path="res://scenes/drone.tscn" id="9_2kw6w"]
+[ext_resource type="PackedScene" uid="uid://dv3co2p5l5lft" path="res://scenes/car.tscn" id="10_a4bx8"]
+[ext_resource type="PackedScene" uid="uid://7ostwb7x1ctw" path="res://scenes/hunter.tscn" id="10_gpumj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vm7hl"]
+size = Vector2(748.5, 178)
+
+[sub_resource type="Curve2D" id="Curve2D_i5o7i"]
+_data = {
+"points": PackedVector2Array(554.372, 1018.23, -554.372, -1018.23, -2257, 1410, 0, 0, 0, 0, -1925, -2278.19, 0, 0, 0, 0, 1899, -2128.67, 0, 0, 0, 0, 1910, -2133.97, 794.39, -438.85, -794.39, 438.85, 1757, 1896.71, 0, 0, 0, 0, -2257, 1410)
+}
+point_count = 6
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_dxb8k"]
+vertices = PackedVector2Array(661, 1135, 812, 1027, 1201, 1035, 1223, 2484, 660, 1305, -443, 2366, -139, 1303, -468, 209, -126, 1127, 1265, 234, 799, 840, 1215, 833)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4), PackedInt32Array(4, 3, 5, 6), PackedInt32Array(6, 5, 7, 8), PackedInt32Array(8, 7, 9, 10), PackedInt32Array(9, 11, 10), PackedInt32Array(0, 8, 10, 1)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-443, 2366, -468, 209, 1265, 234, 1215, 833, 799, 840, 812, 1027, 1201, 1035, 1223, 2484), PackedVector2Array(-139, 1303, 660, 1305, 661, 1135, -126, 1127)])
+
+[node name="Outside" instance=ExtResource("1_lk2b1")]
+script = ExtResource("2_5mpn8")
+
+[node name="Soil" type="Sprite2D" parent="Ground" index="0"]
+texture_repeat = 2
+texture = ExtResource("2_jp125")
+region_enabled = true
+region_rect = Rect2(-1005.4, -372.505, 10000, 5000)
+
+[node name="House" parent="Ground" index="1" instance=ExtResource("4_jml0j")]
+position = Vector2(616, -449)
+
+[node name="Items" type="Node2D" parent="." index="1"]
+
+[node name="Toilet" parent="." index="2" instance=ExtResource("7_v4eyt")]
+position = Vector2(1433, 568)
+
+[node name="Crate" parent="." index="3" instance=ExtResource("6_n3uq7")]
+position = Vector2(1014, 935)
+
+[node name="Crate2" parent="." index="4" instance=ExtResource("6_n3uq7")]
+position = Vector2(65, 1218)
+
+[node name="Crate3" parent="." index="5" instance=ExtResource("6_n3uq7")]
+position = Vector2(460, 1218)
+
+[node name="Gates" type="Area2D" parent="." index="7"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gates" index="0"]
+position = Vector2(620, 143)
+shape = SubResource("RectangleShape2D_vm7hl")
+
+[node name="Player" parent="." index="8"]
+position = Vector2(594, 498)
+
+[node name="item" parent="." index="10" instance=ExtResource("5_8cwfi")]
+visible = false
+position = Vector2(182, 464)
+
+[node name="Enemies" type="Node2D" parent="." index="11"]
+
+[node name="Scout" parent="Enemies" index="0" instance=ExtResource("8_6fwux")]
+position = Vector2(-1079, 919)
+collision_mask = 15
+
+[node name="Drone" parent="Enemies" index="1" instance=ExtResource("9_2kw6w")]
+position = Vector2(2063, 1428)
+
+[node name="Hunter" parent="Enemies" index="2" instance=ExtResource("10_gpumj")]
+position = Vector2(288, 2183)
+collision_layer = 2
+collision_mask = 15
+
+[node name="CarPath" type="Path2D" parent="." index="12"]
+position = Vector2(0, 114.371)
+scale = Vector2(1, 0.943018)
+curve = SubResource("Curve2D_i5o7i")
+
+[node name="Car" parent="CarPath" index="0" instance=ExtResource("10_a4bx8")]
+position = Vector2(-2257, 1410)
+rotation = -2.06937
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." index="13"]
+navigation_polygon = SubResource("NavigationPolygon_dxb8k")
+
+[connection signal="body_entered" from="Gates" to="." method="_on_area_2d_body_entered"]

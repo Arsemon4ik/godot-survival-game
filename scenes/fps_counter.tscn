@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://dbs8vfhvcgtie"]
+
+[ext_resource type="FontFile" uid="uid://ojidmulvx7og" path="res://graphics/ui/subatomic.tsoonami.ttf" id="1_i20id"]
+[ext_resource type="Script" path="res://scenes/fps_counter.gd" id="1_wx7py"]
+
+[node name="fps_counter" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+
+[node name="BoxContainer" type="BoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.023
+anchor_top = 0.022
+anchor_right = 0.091
+anchor_bottom = 0.028
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("1_i20id")
+theme_override_font_sizes/font_size = 20
+script = ExtResource("1_wx7py")

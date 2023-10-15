@@ -1,0 +1,62 @@
+[gd_scene load_steps=8 format=3 uid="uid://hprgdiwuvrq0"]
+
+[ext_resource type="Script" path="res://scenes/scout.gd" id="1_0tis8"]
+[ext_resource type="Texture2D" uid="uid://dodurqyroyjnx" path="res://graphics/enemies/scout.png" id="1_uc8v0"]
+[ext_resource type="Shader" path="res://scenes/scout.gdshader" id="2_k0lge"]
+[ext_resource type="AudioStream" uid="uid://y51vs32l5wgn" path="res://audio/solid_impact.ogg" id="4_suns2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4dqkp"]
+shader = ExtResource("2_k0lge")
+shader_parameter/color = Color(0.847059, 0.968627, 0.996078, 1)
+shader_parameter/progress = 0.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_syd4l"]
+radius = 45.0999
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tkrhq"]
+radius = 684.007
+
+[node name="Scout" type="CharacterBody2D" groups=["Entity", "Scouts"]]
+collision_layer = 2
+collision_mask = 11
+script = ExtResource("1_0tis8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_4dqkp")
+position = Vector2(33, 33)
+rotation = 1.5708
+texture = ExtResource("1_uc8v0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-6, 7)
+shape = SubResource("CircleShape2D_syd4l")
+
+[node name="AttackArea" type="Area2D" parent="."]
+collision_layer = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+shape = SubResource("CircleShape2D_tkrhq")
+
+[node name="LaserSpawnPositions" type="Node2D" parent="."]
+
+[node name="Marker2D" type="Marker2D" parent="LaserSpawnPositions"]
+position = Vector2(101, -22)
+
+[node name="Marker2D2" type="Marker2D" parent="LaserSpawnPositions"]
+position = Vector2(107, 19)
+
+[node name="Node" type="Node" parent="."]
+
+[node name="TimerCoolDown" type="Timer" parent="Node"]
+
+[node name="HitTimer" type="Timer" parent="Node"]
+wait_time = 0.2
+one_shot = true
+
+[node name="HitSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_suns2")
+
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_attack_area_body_exited"]
+[connection signal="timeout" from="Node/TimerCoolDown" to="." method="_on_timer_cool_down_timeout"]
+[connection signal="timeout" from="Node/HitTimer" to="." method="_on_hit_timer_timeout"]
