@@ -1,11 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://hprgdiwuvrq0"]
+[gd_scene load_steps=13 format=3 uid="uid://hprgdiwuvrq0"]
 
 [ext_resource type="Script" path="res://scenes/scout.gd" id="1_0tis8"]
 [ext_resource type="Texture2D" uid="uid://dodurqyroyjnx" path="res://graphics/enemies/scout.png" id="1_uc8v0"]
 [ext_resource type="Shader" path="res://scenes/scout.gdshader" id="2_k0lge"]
 [ext_resource type="AudioStream" uid="uid://y51vs32l5wgn" path="res://audio/solid_impact.ogg" id="4_suns2"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="5_ufyea"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="6_axjof"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="7_x2s0h"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="8_s5twn"]
+[ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="9_j0csx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4dqkp"]
+resource_local_to_scene = true
 shader = ExtResource("2_k0lge")
 shader_parameter/color = Color(0.847059, 0.968627, 0.996078, 1)
 shader_parameter/progress = 0.0
@@ -40,10 +46,10 @@ shape = SubResource("CircleShape2D_tkrhq")
 [node name="LaserSpawnPositions" type="Node2D" parent="."]
 
 [node name="Marker2D" type="Marker2D" parent="LaserSpawnPositions"]
-position = Vector2(101, -22)
+position = Vector2(111, -22)
 
 [node name="Marker2D2" type="Marker2D" parent="LaserSpawnPositions"]
-position = Vector2(107, 19)
+position = Vector2(119, 18)
 
 [node name="Node" type="Node" parent="."]
 
@@ -56,7 +62,41 @@ one_shot = true
 [node name="HitSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_suns2")
 
+[node name="ScoutStateMachine" type="Node" parent="."]
+script = ExtResource("5_ufyea")
+
+[node name="Root" type="Node" parent="ScoutStateMachine"]
+script = ExtResource("6_axjof")
+initial_state = NodePath("Observing")
+
+[node name="Observing" type="Node" parent="ScoutStateMachine/Root"]
+script = ExtResource("7_x2s0h")
+
+[node name="Transition To Attack" type="Node" parent="ScoutStateMachine/Root/Observing"]
+script = ExtResource("8_s5twn")
+to = NodePath("../../Attack")
+event = &"player_entered"
+
+[node name="Attack" type="Node" parent="ScoutStateMachine/Root"]
+script = ExtResource("7_x2s0h")
+
+[node name="Transition To Observing" type="Node" parent="ScoutStateMachine/Root/Attack"]
+script = ExtResource("8_s5twn")
+to = NodePath("../../Observing")
+event = &"player_exited"
+
+[node name="StateChartDebugger" parent="." instance=ExtResource("9_j0csx")]
+visible = false
+offset_left = 131.0
+offset_top = -332.0
+offset_right = 983.0
+offset_bottom = 457.0
+enabled = false
+initial_node_to_watch = NodePath("../ScoutStateMachine")
+
 [connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
 [connection signal="body_exited" from="AttackArea" to="." method="_on_attack_area_body_exited"]
 [connection signal="timeout" from="Node/TimerCoolDown" to="." method="_on_timer_cool_down_timeout"]
 [connection signal="timeout" from="Node/HitTimer" to="." method="_on_hit_timer_timeout"]
+[connection signal="state_processing" from="ScoutStateMachine/Root/Observing" to="." method="_on_observing_state_processing"]
+[connection signal="state_processing" from="ScoutStateMachine/Root/Attack" to="." method="_on_attack_state_processing"]

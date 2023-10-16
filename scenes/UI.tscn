@@ -101,6 +101,7 @@ texture_over = ExtResource("5_sm0xv")
 texture_progress = ExtResource("6_1gapf")
 
 [node name="Menu buttons" type="HBoxContainer" parent="."]
+visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0

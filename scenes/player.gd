@@ -18,7 +18,7 @@ func hit():
 # manage phycics process every frame
 func _physics_process(delta):
 	var direction = Input.get_vector("left", "right", "up", "down")
-	position += direction * speed * delta
+	velocity = direction * speed
 	Globals.global_player_position = position
 	
 	# move and collision script
@@ -58,4 +58,8 @@ func _physics_process(delta):
 func _on_timer_timeout():
 	can_laser = true
 	can_grenade = true
+	
+#func _input(event: InputEvent):
+#	if event.is_action_pressed("ui_cancel"):
+#		print("ESC PL")
 

@@ -33,6 +33,9 @@ func player_vulnerable_timer():
 	player_vulnerable = true
 	
 var global_player_position: Vector2
+var global_player_scene: String:
+	set(value):
+		global_player_scene = value
 
 func _ready():
 	player_hit_sound = AudioStreamPlayer2D.new()

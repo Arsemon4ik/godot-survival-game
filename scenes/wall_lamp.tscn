@@ -23,12 +23,12 @@ region_rect = Rect2(-39.0649, -58.104, 934.185, 258.23)
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(0, -1)
 color = Color(0.756863, 0.0588235, 0.223529, 1)
-energy = 2.0
+energy = 3.14
 shadow_enabled = true
 shadow_color = Color(0.72549, 0.137255, 0.168627, 0.0156863)
 shadow_filter_smooth = 0.1
 texture = ExtResource("2_c6bhp")
-texture_scale = 1.8
+texture_scale = 4.27
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
 occluder = SubResource("OccluderPolygon2D_t8fa0")
