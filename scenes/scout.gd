@@ -18,6 +18,7 @@ func hit():
 		$Sprite2D.material.set_shader_parameter("progress", 1)
 		$HitSound.play()
 	if health <= 0:
+		Globals.enemies_killed += 1
 		queue_free()
 #
 #func _process(_delta):

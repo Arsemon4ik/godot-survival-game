@@ -333,7 +333,6 @@ position = Vector2(-18, 34)
 rotation = 3.14159
 scale = Vector2(1, -1)
 texture = ExtResource("7_shxn3")
-metadata/_edit_lock_ = true
 
 [node name="LeftBackClaw" type="Bone2D" parent="Skeleton2D/Torso/LeftBackLeg"]
 position = Vector2(-36, 71)
@@ -351,7 +350,7 @@ texture = ExtResource("8_mdpwd")
 position = Vector2(-27, -24)
 
 [node name="FrontRight" type="Marker2D" parent="Targets"]
-position = Vector2(79, -137)
+position = Vector2(168, -181)
 
 [node name="FrontLeft" type="Marker2D" parent="Targets"]
 position = Vector2(-60, -59)

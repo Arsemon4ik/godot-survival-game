@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bwy444lg70j40"]
+[gd_scene load_steps=6 format=3 uid="uid://bwy444lg70j40"]
 
 [ext_resource type="PackedScene" uid="uid://b66faf4i732d0" path="res://scenes/player.tscn" id="1_05aq4"]
 [ext_resource type="Script" path="res://scenes/level.gd" id="1_agbb1"]
 [ext_resource type="PackedScene" uid="uid://c6ughq30xr0fc" path="res://scenes/UI.tscn" id="3_di8q7"]
 [ext_resource type="PackedScene" uid="uid://3dd11g371hii" path="res://scenes/pause_menu.tscn" id="4_86mt5"]
+[ext_resource type="PackedScene" uid="uid://bvt37cgt60pyl" path="res://scenes/game_over.tscn" id="5_bnyxy"]
 
 [node name="Level" type="Node2D"]
 process_mode = 3
@@ -31,8 +32,12 @@ process_mode = 1
 [node name="PauseMenuCanvas" parent="." instance=ExtResource("4_86mt5")]
 visible = false
 
+[node name="Game over" parent="." instance=ExtResource("5_bnyxy")]
+visible = false
+
 [connection signal="grenade" from="Player" to="." method="_on_player_grenade"]
 [connection signal="laser" from="Player" to="." method="_on_player_laser"]
+[connection signal="player_dead" from="Player" to="." method="_on_player_player_dead"]
 [connection signal="load_button" from="UI" to="." method="_on_ui_load_button"]
 [connection signal="save_button" from="UI" to="." method="_on_ui_save_button"]
 [connection signal="exit_game" from="PauseMenuCanvas" to="." method="_on_pause_menu_canvas_exit_game"]

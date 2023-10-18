@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://3dd11g371hii"]
+[gd_scene load_steps=3 format=3 uid="uid://3dd11g371hii"]
 
 [ext_resource type="Script" path="res://scenes/pause_menu.gd" id="1_2whdk"]
+[ext_resource type="Theme" uid="uid://bmv1ak3cxlbqy" path="res://scenes/main_theme_text.tres" id="2_hifib"]
 
 [node name="PauseMenuCanvas" type="CanvasLayer"]
 process_mode = 2
@@ -39,6 +40,7 @@ offset_top = -74.5
 offset_bottom = 74.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_hifib")
 theme_override_constants/separation = 10
 
 [node name="Label" type="Label" parent="PauseMenu/Panel/VBoxContainer"]

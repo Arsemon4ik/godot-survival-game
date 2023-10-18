@@ -1,0 +1,66 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvt37cgt60pyl"]
+
+[ext_resource type="Script" path="res://game over.gd" id="1_f0che"]
+[ext_resource type="Theme" uid="uid://bmv1ak3cxlbqy" path="res://scenes/main_theme_text.tres" id="2_lc3g6"]
+
+[node name="Game over" type="CanvasLayer"]
+script = ExtResource("1_f0che")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -183.0
+offset_top = -178.0
+offset_right = 160.0
+offset_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Panel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -32.5
+offset_bottom = 32.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_lc3g6")
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="Control/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Game over"
+horizontal_alignment = 1
+
+[node name="Label_killed" type="Label" parent="Control/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Enemies killed: 20"
+horizontal_alignment = 1
+
+[node name="MaxScore" type="Label" parent="Control/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Max Score: 85"
+horizontal_alignment = 1
+
+[node name="RestartBtn" type="Button" parent="Control/Panel/VBoxContainer"]
+self_modulate = Color(1, 0.478431, 0.411765, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Try again
+"
+
+[connection signal="pressed" from="Control/Panel/VBoxContainer/RestartBtn" to="." method="_on_restart_btn_pressed"]
