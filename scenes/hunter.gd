@@ -26,7 +26,7 @@ func _physics_process(_delta):
 
 func attack():
 	if player_near:
-		Globals.health -= 20
+		Globals.health -= 10
 		
 
 func hit():
@@ -37,6 +37,7 @@ func hit():
 		$Particles/HitParticles.emitting = true
 		
 	if health <= 0:
+		Globals.enemies_killed += 1
 		await get_tree().create_timer(0.2).timeout
 		queue_free()
 		

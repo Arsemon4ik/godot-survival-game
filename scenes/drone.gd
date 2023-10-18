@@ -43,6 +43,7 @@ func hit():
 		$HitTimer.start()
 	if health <= 0:
 		$AnimationPlayer.play("explosion")
+		Globals.enemies_killed += 1
 		explosion_active = true
 
 

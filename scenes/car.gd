@@ -11,7 +11,7 @@ func _ready():
 	line2.add_point($Turret/RayCast2D2.target_position)
 
 func _process(delta):
-	progress_ratio += 0.01 * delta
+	progress_ratio += 0.03 * delta
 	if player_near:
 		$Turret.look_at(Globals.global_player_position)
 
@@ -34,7 +34,7 @@ func _on_notice_area_body_entered(_body):
 
 func _on_notice_area_body_exited(_body):
 	player_near = false
-	$AnimationPlayer.pause("laser_load")
+	$AnimationPlayer.pause()
 	
 	var tween = create_tween()
 	tween.set_parallel(true)
@@ -42,4 +42,4 @@ func _on_notice_area_body_exited(_body):
 	tween.tween_property(line2, 'width', 0, randf_range(0.1, 0.5))
 	
 	await tween.finished
-	$AnimationPlayer.stop("laser_load")
+	$AnimationPlayer.stop()

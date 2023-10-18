@@ -12,88 +12,55 @@
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_4rsq7")
 
-[node name="LaserCounter" type="Control" parent="."]
-layout_mode = 3
-anchor_left = 0.02
-anchor_top = 0.919
-anchor_right = 0.02
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -2.6
-offset_top = -39.68
-offset_right = 55.4
+offset_top = -60.0
+grow_horizontal = 2
 grow_vertical = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="LaserCounter"]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = -0.031
-anchor_right = 1.366
-anchor_bottom = 1.0
-offset_left = -3.0
-offset_top = -0.962
-offset_right = -22.228
-offset_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.06
 
-[node name="Label" type="Label" parent="LaserCounter/VBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_diwqw")
 text = "1"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="LaserCounter/VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 texture = ExtResource("1_du36a")
 expand_mode = 4
 
-[node name="GrenadeCounter" type="Control" parent="."]
-layout_mode = 3
-anchor_left = 0.06
-anchor_top = 0.95
-anchor_right = 0.06
-anchor_bottom = 1.0
-offset_left = 0.200005
-offset_top = -49.0
-offset_right = 60.2
-grow_vertical = 0
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.06
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GrenadeCounter"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.342
-anchor_bottom = 1.0
-offset_top = -12.0
-offset_right = -4.888
-offset_bottom = 13.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Label" type="Label" parent="GrenadeCounter/VBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 theme = ExtResource("1_diwqw")
 text = "3"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="GrenadeCounter/VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 texture = ExtResource("2_hwxcm")
 expand_mode = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -150.0
-offset_top = -40.0
-offset_right = 150.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
 theme_override_constants/margin_bottom = 30
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="MarginContainer"]
+[node name="TextureProgressBar" type="TextureProgressBar" parent="HBoxContainer/MarginContainer"]
 layout_mode = 2
 value = 10.0
 texture_under = ExtResource("4_xintg")
@@ -101,6 +68,7 @@ texture_over = ExtResource("5_sm0xv")
 texture_progress = ExtResource("6_1gapf")
 
 [node name="Menu buttons" type="HBoxContainer" parent="."]
+visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -120,6 +88,25 @@ text = "Load
 "
 
 [node name="fps_counter" parent="." instance=ExtResource("8_2f3po")]
+
+[node name="LaserCounter" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 496.0
+offset_top = 634.0
+offset_right = 496.0
+offset_bottom = 720.0
+grow_vertical = 0
+size_flags_horizontal = 0
+
+[node name="GrenadeCounter" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 500.0
+offset_top = 634.0
+offset_right = 500.0
+offset_bottom = 720.0
+grow_vertical = 0
 
 [connection signal="pressed" from="Menu buttons/Save" to="." method="_on_save_pressed"]
 [connection signal="pressed" from="Menu buttons/Load" to="." method="_on_load_pressed"]

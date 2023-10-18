@@ -36,6 +36,7 @@
 [ext_resource type="AudioStream" uid="uid://dbg2dar685har" path="res://audio/organic_impact.mp3" id="34_p1r7q"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d8r40"]
+resource_local_to_scene = true
 shader = ExtResource("2_w71ud")
 shader_parameter/color = Color(0.807843, 1, 0.862745, 1)
 shader_parameter/progress = 0.0
@@ -148,7 +149,7 @@ radius = 528.572
 height = 1971.43
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mhl3h"]
-radius = 11072.0
+radius = 13685.7
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xxwko"]
 radius = 1243.19
@@ -185,7 +186,7 @@ anim_offset_max = 1.0
 [node name="Bug" type="CharacterBody2D" groups=["Entity"]]
 scale = Vector2(0.07, 0.07)
 collision_layer = 2
-collision_mask = 11
+collision_mask = 15
 script = ExtResource("1_pcihw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -193,9 +194,7 @@ material = SubResource("ShaderMaterial_d8r40")
 position = Vector2(0, -14.2857)
 rotation = 1.5708
 sprite_frames = SubResource("SpriteFrames_2mygo")
-animation = &"walk"
-frame = 1
-frame_progress = 0.397116
+animation = &"attack"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -205,7 +204,6 @@ shape = SubResource("CapsuleShape2D_hcjll")
 collision_layer = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="NoticeArea"]
-visible = false
 shape = SubResource("CircleShape2D_mhl3h")
 
 [node name="AttackArea" type="Area2D" parent="."]

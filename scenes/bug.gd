@@ -6,6 +6,9 @@ var vulnerable: bool = true
 var player_nearby: bool = false
 var health: int = 20
 
+#func _ready():
+#	$AnimatedSprite2D.material.ResourceLocalToScene = true
+
 func hit():
 	if vulnerable:
 		vulnerable = false
@@ -16,6 +19,7 @@ func hit():
 		$AudioStreamPlayer2D.play()
 		
 	if health <= 0:
+		Globals.enemies_killed += 1
 		await get_tree().create_timer(0.5).timeout
 		queue_free()
 
@@ -27,6 +31,7 @@ func _process(_delta):
 		look_at(Globals.global_player_position)
 
 func _on_attack_area_body_entered(_body):
+	print("PLAYER HERE")
 	player_nearby = true
 	$AnimatedSprite2D.play("attack")
 

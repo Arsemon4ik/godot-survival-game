@@ -3,26 +3,29 @@ extends CharacterBody2D
 # variables for shooting
 var can_laser: bool = true
 var can_grenade: bool = true
-var speed: int = 500
+var speed: int = 600
 
 # signals
 signal laser(pos, direction)
 signal grenade(pos, direction)
+signal player_dead
 
 
 func hit():
 	Globals.health -= 10
 	if Globals.health <= 0:
+		player_dead.emit()
 		queue_free()
 
 # manage phycics process every frame
 func _physics_process(delta):
 	var direction = Input.get_vector("left", "right", "up", "down")
-	position += direction * speed * delta
+	velocity = direction * speed * delta
 	Globals.global_player_position = position
 	
 	# move and collision script
-	move_and_slide()
+#	move_and_slide()
+	move_and_collide(velocity)
 	
 	# rotate
 	look_at(get_global_mouse_position())
@@ -58,4 +61,8 @@ func _physics_process(delta):
 func _on_timer_timeout():
 	can_laser = true
 	can_grenade = true
+	
+#func _input(event: InputEvent):
+#	if event.is_action_pressed("ui_cancel"):
+#		print("ESC PL")
 

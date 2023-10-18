@@ -1,10 +1,10 @@
 extends CanvasLayer
 
-@onready var laser_label = $LaserCounter/VBoxContainer/Label
-@onready var grenade_label = $GrenadeCounter/VBoxContainer/Label
-@onready var laser_icon = $LaserCounter/VBoxContainer/TextureRect
-@onready var grenade_icon = $GrenadeCounter/VBoxContainer/TextureRect
-@onready var health_bar = $MarginContainer/TextureProgressBar
+@onready var laser_label = $HBoxContainer/VBoxContainer/Label
+@onready var grenade_label = $HBoxContainer/VBoxContainer2/Label
+@onready var laser_icon = $HBoxContainer/VBoxContainer/TextureRect
+@onready var grenade_icon = $HBoxContainer/VBoxContainer2/TextureRect
+@onready var health_bar = $HBoxContainer/MarginContainer/TextureProgressBar
 
 var green: Color = Color("6bbfa3")
 var red: Color = Color(0.9,0,0,1)
@@ -15,7 +15,7 @@ signal load_button
 
 func _ready():
 	Globals.connect("stats_change", update_stats)
-	update_stats()
+	update_stats() 
 	
 
 func _on_save_pressed():
