@@ -35,6 +35,12 @@ visible = false
 [node name="Game over" parent="." instance=ExtResource("5_bnyxy")]
 visible = false
 
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="HTTPRequestPOST" type="HTTPRequest" parent="."]
+
+[node name="HTTPRequestMaxScore" type="HTTPRequest" parent="."]
+
 [connection signal="grenade" from="Player" to="." method="_on_player_grenade"]
 [connection signal="laser" from="Player" to="." method="_on_player_laser"]
 [connection signal="player_dead" from="Player" to="." method="_on_player_player_dead"]
@@ -44,3 +50,5 @@ visible = false
 [connection signal="load_game" from="PauseMenuCanvas" to="." method="_on_pause_menu_canvas_load_game"]
 [connection signal="save_game" from="PauseMenuCanvas" to="." method="_on_pause_menu_canvas_save_game"]
 [connection signal="toggle_game_paused" from="PauseMenuCanvas" to="." method="_on_pause_menu_canvas_toggle_game_paused"]
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_get_player_info_request_completed"]
+[connection signal="request_completed" from="HTTPRequestMaxScore" to="." method="_on_http_request_max_score_request_completed"]

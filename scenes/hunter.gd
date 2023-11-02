@@ -37,8 +37,8 @@ func hit():
 		$Particles/HitParticles.emitting = true
 		
 	if health <= 0:
-		Globals.enemies_killed += 1
 		await get_tree().create_timer(0.2).timeout
+		Globals.enemies_killed += 1
 		queue_free()
 		
 

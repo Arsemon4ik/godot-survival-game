@@ -5,24 +5,15 @@ class_name LevelParent
 var laser_scene: PackedScene = preload("res://scenes/laser.tscn")
 var grenade_scene: PackedScene = preload("res://scenes/grenade.tscn")
 var item_scene: PackedScene = preload("res://scenes/item.tscn")
-#var SQLite3 = preload("res://addons/godot-sqlite/gdsqlite.gdextension")
-
-var db_name = "res://DataStore/db"
-var db = SQLite.new() as SQLite
-
-var save_file_path = "user://save/"
-var save_file_name = "PlayerSave.tres"
 
 var player_data = PlayerData.new()
 
-@onready var last_id: int 
+@onready var last_id = 0;
 
 func _ready():
-	verify_save_directory(save_file_path)
 	Globals.global_player_scene = get_tree().current_scene.scene_file_path
-	print(Globals.global_player_scene)
-	last_id = get_last_id_from_db()
-	Globals.max_score = get_player_max_score_from_db()
+	get_player_max_score_from_server()
+
 	
 	for container in get_tree().get_nodes_in_group("Container"):
 		container.connect("open", _on_container_opened)
@@ -47,9 +38,6 @@ func create_laser(laser_pos, direction):
 	laser.direction = direction
 	$ProjectTiles.add_child(laser)
 
-func verify_save_directory(path: String):
-	DirAccess.make_dir_absolute(path)
-
 # Event if player shoot from laser
 func _on_player_laser(laser_pos, direction):
 	create_laser(laser_pos, direction)
@@ -61,62 +49,6 @@ func _on_player_grenade(grenade_pos, direction):
 	grenade.linear_velocity = direction * grenade.speed
 	$ProjectTiles.add_child(grenade)
 
-
-func get_player_position_from_db():
-	db.path = db_name
-	db.open_db()
-	var table_name = "player_data"
-	db.query('select * from ' + table_name + ' order by id desc limit 1')
-	printerr(db.query_result)
-	return { 
-		"player_position" : Vector2(db.query_result[0]['player_x'], db.query_result[0]['player_y']), 
-		"player_health" : int(db.query_result[0]['player_health']), 
-		"player_path_to_scene" : str(db.query_result[0]['player_scene']), 
-		"player_laser_bullets" : int(db.query_result[0]['player_laser_bullets']), 
-		"player_grenade_bullets" : int(db.query_result[0]['player_grenade_bullets']),
-		}
-
-func get_player_max_score_from_db():
-	db.path = db_name
-	db.open_db()
-	var table_name = "player_data"
-	db.query('select player_max_score from ' + table_name + ' order by id desc limit 1')
-	print("MAX SCORE: " + str(db.query_result[0]['player_max_score']))
-	var output = int(db.query_result[0]['player_max_score'])
-	if output != 0: 
-		return output
-	else:
-		return 0
-
-func get_last_id_from_db():
-	db.path = db_name
-	db.open_db()
-	var table_name = "player_data"
-	db.query('select id from ' + table_name + ' order by id desc limit 1')
-	print("LAST ID: " + str(db.query_result[0]['id']))
-	var id = int(db.query_result[0]['id'])
-	if id != 0: 
-		return id
-	else:
-		return 0
-	
-	
-func set_player_position_to_db(player_position: Dictionary):
-	db = SQLite.new() as SQLite
-	db.path = db_name
-	db.open_db()
-	db.insert_row("player_data", player_position)
-
-func set_player_max_score_to_db(player_max_score: int):
-	db = SQLite.new() as SQLite
-	db.path = db_name
-	db.open_db()
-	var table_name = "player_data"
-#	db.query_with_bindings('update player_max_score from ' + table_name + ' SET player_max_score=? WHERE id = (SELECT MAX(id) FROM + ' + table_name +')', [player_max_score])
-#	db.get_autocommit()
-	db.update_rows(table_name, "id=" + str(last_id), {'player_max_score': str(player_max_score)})
-#	db.close_db()
-
 func update_stats(player_position: Vector2, player_health: int, player_path_to_scene: String,
 player_laser_bullets: int, player_grenade_bullets: int):
 	%Player.position = player_position
@@ -124,29 +56,6 @@ player_laser_bullets: int, player_grenade_bullets: int):
 	Globals.laser_count = player_laser_bullets
 	Globals.grenade_count = player_grenade_bullets
 	Globals.global_player_scene = player_path_to_scene
-
-
-
-func _on_ui_save_button():
-#	player_data.player_position = %Player.global_position
-	var player_position = Globals.global_player_position
-	var dict: Dictionary = {}
-	dict["player_x"] = player_position[0]
-	dict["player_y"] = player_position[1]
-	dict["player_scene"] = Globals.global_player_scene
-	dict["player_laser_bullets"] = Globals.laser_count
-	dict["player_grenade_bullets"] = Globals.grenade_count
-	dict["player_health"] = Globals.health
-	dict["player_max_score"] = Globals.health
-	set_player_position_to_db(dict)
-#	ResourceSaver.save(player_data, save_file_path + save_file_name)
-	
-
-func _on_ui_load_button():
-#	player_data = ResourceLoader.load(save_file_path + save_file_name).duplicate(true)
-	player_data = get_player_position_from_db()
-#	update_position(player_data.player_position)
-
 
 
 func _on_pause_menu_canvas_toggle_game_paused(is_paused: bool):
@@ -157,8 +66,8 @@ func _on_pause_menu_canvas_toggle_game_paused(is_paused: bool):
 
 
 func _on_pause_menu_canvas_save_game():
-	var player_position = Globals.global_player_position
 	var dict: Dictionary = {}
+	var player_position = Globals.global_player_position
 	dict["player_x"] = player_position[0]
 	dict["player_y"] = player_position[1]
 	dict["player_scene"] = Globals.global_player_scene
@@ -166,18 +75,27 @@ func _on_pause_menu_canvas_save_game():
 	dict["player_grenade_bullets"] = Globals.grenade_count
 	dict["player_health"] = Globals.health
 	dict["player_max_score"] = Globals.max_score
-	set_player_position_to_db(dict)
+	var json = JSON.new()
+	var data_to_send = json.stringify(dict)
+	var headers = ["Content-Type: application/json"]
+	var url = 'http://127.0.0.1:8000/player/'
+	$HTTPRequestPOST.request(url, headers, HTTPClient.METHOD_POST, data_to_send)
+
+func set_new_max_score():
+	var dict: Dictionary = {}
+	dict["player_max_score"] = Globals.max_score
+	var json = JSON.new()
+	var data_to_send = json.stringify(dict)
+	var headers = ["Content-Type: application/json"]
+	var url = 'http://127.0.0.1:8000/player/'+str(last_id)+'/'
+	$HTTPRequestPOST.request(url, headers, HTTPClient.METHOD_PATCH, data_to_send)
 
 
 func _on_pause_menu_canvas_load_game():
-	player_data = get_player_position_from_db()
-#	TransitionLayer.change_scene_on_load(Globals.global_player_scene)
-	update_stats(player_data.player_position, player_data.player_health, 
-	player_data.player_path_to_scene, player_data.player_laser_bullets, 
-	player_data.player_grenade_bullets)
-	load(Globals.global_player_scene)
-#	get_tree().paused = false
+	$HTTPRequest.request("http://127.0.0.1:8000/player/")
 
+func get_player_max_score_from_server():
+	$HTTPRequestMaxScore.request("http://127.0.0.1:8000/player/")
 
 
 func _on_pause_menu_canvas_exit_game():
@@ -187,7 +105,7 @@ func _on_pause_menu_canvas_exit_game():
 func _on_player_player_dead():
 	if Globals.enemies_killed > Globals.max_score:
 		Globals.max_score = Globals.enemies_killed
-		set_player_max_score_to_db(Globals.max_score)
+		set_new_max_score()
 	$"Game over".set_score(Globals.enemies_killed)
 	$"Game over".set_max_score(Globals.max_score)
 	await get_tree().create_timer(1).timeout
@@ -197,3 +115,32 @@ func _on_player_player_dead():
 
 #func _on_game_over_retry_game():
 #	get_tree().reload_current_scene()
+
+
+func _on_http_request_get_player_info_request_completed(result, response_code, headers, body):
+	var json = JSON.new()
+	var parsed_data_from_server = json.parse_string(body.get_string_from_utf8())
+	var latest_save = parsed_data_from_server[-1]
+
+	var player_position:Vector2 = Vector2(latest_save['player_x'], latest_save['player_y'])
+	update_stats(player_position, latest_save['player_health'], 
+	latest_save['player_scene'], latest_save['player_laser_bullets'], 
+	latest_save['player_grenade_bullets'])
+	load(Globals.global_player_scene)
+#	var error = json.parse(result)
+#	if error == OK:
+#		var data_received = json.data
+#		if typeof(data_received) == TYPE_ARRAY:
+#			print(data_received) # Prints array
+#		else:
+#			print("Unexpected data")
+#	else:
+#		print("JSON Parse Error: ", json.get_error_message(), " in ", result, " at line ", json.get_error_line())
+
+
+func _on_http_request_max_score_request_completed(result, response_code, headers, body):
+	var json = JSON.new()
+	var parsed_data_from_server = json.parse_string(body.get_string_from_utf8())
+	var latest_save = parsed_data_from_server[-1]
+	Globals.max_score = latest_save.player_max_score
+	last_id = latest_save.id

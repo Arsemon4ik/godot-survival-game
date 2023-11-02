@@ -16,3 +16,5 @@ func _on_restart_btn_pressed():
 	get_tree().reload_current_scene()
 	Globals.health = 20
 	Globals.laser_count = 20
+	Globals.grenade_count = 3
+	Globals.enemies_killed = 0
