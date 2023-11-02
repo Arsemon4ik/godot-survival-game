@@ -15,6 +15,8 @@ func _process(delta):
 	if player_near:
 		$Turret.look_at(Globals.global_player_position)
 
+func hit():
+	print("CAR HITTED")
 
 func fire():
 	Globals.health -= 20
