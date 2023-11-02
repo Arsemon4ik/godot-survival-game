@@ -123,13 +123,14 @@ _data = {
 "explosion": SubResource("Animation_klxou")
 }
 
-[node name="Drone" type="CharacterBody2D"]
+[node name="Drone" type="CharacterBody2D" groups=["Entity"]]
 rotation = 1.5708
 collision_layer = 2
 collision_mask = 15
 script = ExtResource("1_0u325")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_mculq")
 position = Vector2(0, -3)
 rotation = 1.5708
@@ -149,7 +150,6 @@ shape = SubResource("CircleShape2D_uyh3l")
 wait_time = 0.2
 
 [node name="Explosion" type="Sprite2D" parent="."]
-visible = false
 position = Vector2(-1, -1)
 scale = Vector2(1.68275, 1.68275)
 texture = ExtResource("3_swjg3")

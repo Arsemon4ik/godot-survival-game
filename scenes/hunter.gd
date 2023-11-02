@@ -26,7 +26,14 @@ func _physics_process(_delta):
 
 func attack():
 	if player_near:
-		Globals.health -= 10
+#		Globals.health -= 10
+		
+		var player = get_tree().get_nodes_in_group("Entity")[0]
+		print(player)
+		if "hit" in player:
+			player.hit()
+		
+		$Timers/AttackTimer.start()
 		
 
 func hit():
@@ -37,8 +44,8 @@ func hit():
 		$Particles/HitParticles.emitting = true
 		
 	if health <= 0:
-		Globals.enemies_killed += 1
 		await get_tree().create_timer(0.2).timeout
+		Globals.enemies_killed += 1
 		queue_free()
 		
 
@@ -68,3 +75,7 @@ func _on_attack_area_body_exited(_body):
 func _on_hit_timer_timeout():
 	vulnerable = true
 		
+
+
+func _on_attack_timer_timeout():
+	$AnimationPlayer.play("attack")

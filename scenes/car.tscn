@@ -56,7 +56,7 @@ _data = {
 "laser_load": SubResource("Animation_dcvvl")
 }
 
-[node name="Car" type="PathFollow2D"]
+[node name="Car" type="PathFollow2D" groups=["Entity"]]
 script = ExtResource("1_ysmqh")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="."]

@@ -19,8 +19,8 @@ func hit():
 		$AudioStreamPlayer2D.play()
 		
 	if health <= 0:
-		Globals.enemies_killed += 1
 		await get_tree().create_timer(0.5).timeout
+		Globals.enemies_killed += 1
 		queue_free()
 
 func _process(_delta):
@@ -53,6 +53,7 @@ func _on_notice_area_body_exited(_body):
 
 func _on_animated_sprite_2d_animation_finished():
 	if player_nearby:
+#		get_parent().hit()
 		Globals.health -= 10
 		$Node/AttackTimer.start()
 

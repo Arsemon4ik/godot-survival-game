@@ -8,12 +8,14 @@ var speed_multiplyer: int = 1
 var health: int = 20
 
 var explosion_active: bool = false
+var explosion_radius: int = 200
+
 
 func _ready():
 	$Sprite2D.show()
 	$Explosion.hide()
 
-func _process(delta):
+func _physics_process(delta):
 	if active:
 		look_at(Globals.global_player_position)
 		var direction = (Globals.global_player_position - position).normalized()
@@ -26,14 +28,16 @@ func _process(delta):
 			explosion_active = true
 			
 		if explosion_active:
+			look_at(Vector2.ZERO)
 			var targets = get_tree().get_nodes_in_group("Container") + get_tree().get_nodes_in_group("Entity")
 			for target in targets:
-				var in_range = target.global_position.distance_to(global_position) < 400
+				var in_range = target.global_position.distance_to(global_position) < explosion_radius
 				if "hit" in target and in_range:
 					target.hit()
 			
 func stop_movement():
 	speed_multiplyer = 0
+	Globals.enemies_killed += 1
 	
 func hit():
 	if vulnerable: 
@@ -43,7 +47,7 @@ func hit():
 		$HitTimer.start()
 	if health <= 0:
 		$AnimationPlayer.play("explosion")
-		Globals.enemies_killed += 1
+
 		explosion_active = true
 
 

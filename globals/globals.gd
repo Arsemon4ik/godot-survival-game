@@ -17,7 +17,7 @@ var grenade_count: int = 3:
 
 var player_vulnerable: bool = true
 
-var health: int = 20:
+var health: int = 50:
 	set(value):
 		if value > health:
 			health = min(value, 100)
@@ -39,14 +39,15 @@ var max_score: int = 0:
 	set(value):
 		max_score = value
 		
-func player_vulnerable_timer():
-	await get_tree().create_timer(0.5).timeout
-	player_vulnerable = true
-	
 var global_player_position: Vector2
 var global_player_scene: String:
 	set(value):
 		global_player_scene = value
+
+func player_vulnerable_timer():
+	await get_tree().create_timer(0.5).timeout
+	player_vulnerable = true
+
 
 func _ready():
 	player_hit_sound = AudioStreamPlayer2D.new()
