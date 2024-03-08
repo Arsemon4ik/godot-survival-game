@@ -10,7 +10,6 @@ signal laser(pos, direction)
 signal grenade(pos, direction)
 signal player_dead
 
-
 func hit():
 	Globals.health -= 10
 	if Globals.health <= 0:

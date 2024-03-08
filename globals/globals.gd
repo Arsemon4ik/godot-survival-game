@@ -1,9 +1,15 @@
 extends Node
 
 signal stats_change
+signal skin_change
 signal enemy_killed
 
 var player_hit_sound: AudioStreamPlayer2D
+
+var selected_skin: int = 0:
+	set(value):
+		selected_skin = value
+		skin_change.emit()
 
 var laser_count: int = 20:
 	set(value):

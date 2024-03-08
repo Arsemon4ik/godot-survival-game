@@ -53,4 +53,3 @@ func update_color(amount: int, label: Label, icon: TextureRect) -> void:
 	else:
 		label.modulate = green
 		icon.modulate = green
-		

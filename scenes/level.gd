@@ -13,7 +13,7 @@ var player_data = PlayerData.new()
 func _ready():
 	Globals.global_player_scene = get_tree().current_scene.scene_file_path
 	get_player_max_score_from_server()
-
+	generate_uuid()
 	
 	for container in get_tree().get_nodes_in_group("Container"):
 		container.connect("open", _on_container_opened)
@@ -141,6 +141,66 @@ func _on_http_request_get_player_info_request_completed(result, response_code, h
 func _on_http_request_max_score_request_completed(result, response_code, headers, body):
 	var json = JSON.new()
 	var parsed_data_from_server = json.parse_string(body.get_string_from_utf8())
-	var latest_save = parsed_data_from_server[-1]
-	Globals.max_score = latest_save.player_max_score
-	last_id = latest_save.id
+	if parsed_data_from_server.is_empty():
+		Globals.max_score = 0
+		last_id = 1
+	else:
+		var latest_save = parsed_data_from_server[-1]
+		Globals.max_score = latest_save.player_max_score
+		last_id = latest_save.id
+
+#
+func _on_pause_menu_canvas_donate():
+	$PauseMenuCanvas.hide()
+	$DonateCanvas.show()
+
+func quit_pause():
+	$PauseMenuCanvas.hide()
+	$DonateCanvas.hide()
+	get_tree().paused = false
+
+func _on_donate_canvas_exit_donate():
+	quit_pause()
+
+
+func _on_donate_canvas_skin_2():
+	Globals.selected_skin = 0
+	quit_pause()
+	
+
+
+func _on_donate_canvas_skin_1():
+	print("REQUEST")
+	var dict: Dictionary = {}
+	dict['player_id'] = 1
+	dict['amount'] = 20 
+	var url = "http://127.0.0.1:8000/payment/"
+	var json = JSON.new()
+	var data_to_send = json.stringify(dict)
+	var headers = ["Content-Type: application/json"]
+	$HTTPRequestPayment.request(url, headers, HTTPClient.METHOD_POST, data_to_send)
+
+
+func _on_http_request_payment_request_completed(result, response_code, headers, body):
+	var json = JSON.new()
+	var parsed_data_from_server = json.parse_string(body.get_string_from_utf8())
+	OS.shell_open(parsed_data_from_server)
+	await get_tree().create_timer(15).timeout 
+	var url = "http://127.0.0.1:8000/payment/"
+	$HTTPRequestCheckPayment.request(url)
+
+
+func _on_http_request_check_payment_request_completed(result, response_code, headers, body):
+	var json = JSON.new()
+	var parsed_data_from_server = json.parse_string(body.get_string_from_utf8())
+	var latest_payment = parsed_data_from_server[-1]
+	if latest_payment['is_success'] == true:
+		print("YES SUCCESS")
+		Globals.selected_skin = 1
+		quit_pause()
+		
+
+func generate_uuid():
+	var uuid = OS.get_unique_id()
+	return uuid
+

@@ -1,0 +1,62 @@
+[gd_scene load_steps=5 format=3 uid="uid://cema1fx283u6h"]
+
+[ext_resource type="Script" path="res://scenes/donate_menu_canvas.gd" id="1_8c4yo"]
+[ext_resource type="Theme" uid="uid://bmv1ak3cxlbqy" path="res://scenes/main_theme_text.tres" id="2_ttckd"]
+[ext_resource type="Texture2D" uid="uid://by08um16hnxm5" path="res://graphics/player/player2.png" id="3_8ywbl"]
+[ext_resource type="Texture2D" uid="uid://2n5mfldwcme8" path="res://graphics/player/player.png" id="3_gtng1"]
+
+[node name="DonateCanvas" type="CanvasLayer"]
+script = ExtResource("1_8c4yo")
+
+[node name="Control" type="Control" parent="."]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_ttckd")
+
+[node name="Panel" type="Panel" parent="Control"]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 47.0
+offset_top = 20.0
+offset_right = -36.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="skin1" type="Button" parent="Control/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+text = "20 UAH"
+icon = ExtResource("3_8ywbl")
+flat = true
+
+[node name="skin2" type="Button" parent="Control/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 30
+text = "0 UAH"
+icon = ExtResource("3_gtng1")
+flat = true
+
+[node name="exit" type="Button" parent="Control/Panel/VBoxContainer"]
+layout_mode = 2
+text = "EXIT"
+
+[connection signal="pressed" from="Control/Panel/VBoxContainer/skin1" to="." method="_on_skin_1_pressed"]
+[connection signal="pressed" from="Control/Panel/VBoxContainer/skin2" to="." method="_on_skin_2_pressed"]
+[connection signal="pressed" from="Control/Panel/VBoxContainer/exit" to="." method="_on_exit_pressed"]
