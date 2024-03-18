@@ -5,7 +5,7 @@ func _on_area_2d_body_entered(_body):
 	var tween = create_tween()
 	tween.tween_property($Player, "speed", 0, 0.5)
 	TransitionLayer.change_scene("res://scenes/inside.tscn")
-
+	
 # Event if player entered the house
 #func _on_house_player_entered(_body):
 #	var tween = get_tree().create_tween()

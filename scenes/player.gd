@@ -42,7 +42,7 @@ func _physics_process(delta):
 		$ShotParticles.emitting = true
 		
 		if Globals.selected_skin == 0:
-			$Timer.start()
+			$Timer.start(0.8)
 		else:
 			$Timer.start(0.2)
 		laser.emit(selected_marker.global_position, player_direction)

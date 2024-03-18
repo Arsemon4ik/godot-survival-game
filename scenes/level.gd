@@ -11,11 +11,12 @@ var player_data = PlayerData.new()
 @onready var last_id = 0;
 @onready var last_transaction_id = '';
 const SERVER_HOST = "http://127.0.0.1:8000"
+const PLAYER_STATE_URL = '/player_state/'
+const PAYMENT_URL = '/payment/'
 #@onready var player_id = 0;
 
 func _ready():
 	Globals.global_player_scene = get_tree().current_scene.scene_file_path
-	get_player_max_score_from_server()
 #	get_player_id_from_server()
 #	generate_uuid()
 	
@@ -53,62 +54,70 @@ func _on_player_grenade(grenade_pos, direction):
 	grenade.linear_velocity = direction * grenade.speed
 	$ProjectTiles.add_child(grenade)
 
-func update_stats(player_position: Vector2, player_health: int, player_path_to_scene: String,
-player_laser_bullets: int, player_grenade_bullets: int, latest_skin: int):
+func update_stats(player_position: Vector2, player_health: int, player_max_score: int, 
+player_path_to_scene: String, player_laser_bullets: int, player_grenade_bullets: int, 
+latest_skin: int, player_has_skin: bool):
+	TransitionLayer.change_scene_on_load(player_path_to_scene)
 	%Player.position = player_position
 	Globals.health = player_health
 	Globals.laser_count = player_laser_bullets
 	Globals.grenade_count = player_grenade_bullets
 	Globals.global_player_scene = player_path_to_scene
+	Globals.max_score = player_max_score
 	Globals.selected_skin = latest_skin
+	Globals.player_has_skin = player_has_skin
 
 
 func _on_pause_menu_canvas_toggle_game_paused(is_paused: bool):
 	if is_paused:
 		$PauseMenuCanvas.show()
-#		var url = SERVER_HOST + "/payment/"
-#		$HTTPRequestCheckPayment.request(url)
-		if Globals.player_has_skin == true:
-			print('PLAYER ALREADY HAS SKIN')
-		else:
-			$HTTPRequestCheckSkin.timeout = 2
-			$HTTPRequestCheckSkin.request(SERVER_HOST + '/player_skin/')
 	else:
 		$PauseMenuCanvas.hide()
+		
+func prepare_post_data_player(player_x: float, player_y: float, player_health: int, player_path_to_scene: String,
+player_laser_bullets: int, player_grenade_bullets: int, player_last_selected_skin: int, player_max_score: int,
+player_has_skin: bool): 
+	var dict: Dictionary = {}
+	dict["player_x"] = player_x
+	dict["player_y"] = player_y
+	dict["player_scene"] = player_path_to_scene
+	dict["player_laser_bullets"] = player_laser_bullets
+	dict["player_grenade_bullets"] = player_grenade_bullets
+	dict["player_health"] = player_health
+	dict["player_max_score"] = player_max_score
+	dict["player_last_selected_skin"] = player_last_selected_skin
+	dict["player_has_skin"] = player_has_skin
+	var json = JSON.new()
+	var data_to_send = json.stringify(dict)
+	return data_to_send
 
 func _on_pause_menu_canvas_save_game():
-	var dict: Dictionary = {}
-	var player_position = Globals.global_player_position
-	dict["player_x"] = player_position[0]
-	dict["player_y"] = player_position[1]
-	dict["player_scene"] = Globals.global_player_scene
-	dict["player_laser_bullets"] = Globals.laser_count
-	dict["player_grenade_bullets"] = Globals.grenade_count
-	dict["player_health"] = Globals.health
-	dict["player_max_score"] = Globals.max_score
-	dict["player_last_skin"] = Globals.selected_skin
-	var json = JSON.new()
-	var data_to_send = json.stringify(dict)
-	var headers = ["Content-Type: application/json"]
-	var url = SERVER_HOST + '/player_state/'
-	$HTTPRequestPOST.request(url, headers, HTTPClient.METHOD_POST, data_to_send)
+	set_new_data_player()
 
-func set_new_max_score():
-	var dict: Dictionary = {}
-	dict["player_max_score"] = Globals.max_score
-	var json = JSON.new()
-	var data_to_send = json.stringify(dict)
+
+func set_new_data_player():
+	var player_position = Globals.global_player_position
+	var data_to_send = prepare_post_data_player(player_position[0], player_position[1], 
+	Globals.health, Globals.global_player_scene, Globals.laser_count, Globals.grenade_count, 
+	Globals.selected_skin, Globals.max_score, Globals.player_has_skin)
 	var headers = ["Content-Type: application/json"]
-	var url = SERVER_HOST + '/player_state/'+str(last_id)+'/'
-	$HTTPRequestPOST.request(url, headers, HTTPClient.METHOD_PATCH, data_to_send)
+	var url = SERVER_HOST + PLAYER_STATE_URL
+	$HTTPRequestPOST.request(url, headers, HTTPClient.METHOD_POST, data_to_send)
+	
+
+func set_data_player_on_death():
+	var data_to_send = prepare_post_data_player(893, -228, 
+	100, Globals.global_player_scene, 20, 3, 
+	Globals.selected_skin, Globals.max_score, Globals.player_has_skin)
+	var headers = ["Content-Type: application/json"]
+	var url = SERVER_HOST + PLAYER_STATE_URL
+	$HTTPRequestPOST.request(url, headers, HTTPClient.METHOD_POST, data_to_send)
 
 
 func _on_pause_menu_canvas_load_game():
-	$HTTPRequest.request(SERVER_HOST + "/player_state/")
+	$HTTPRequest.request(SERVER_HOST + PLAYER_STATE_URL)
 
-func get_player_max_score_from_server():
-	$HTTPRequestMaxScore.timeout = 2
-	$HTTPRequestMaxScore.request(SERVER_HOST + "/player_state/")
+
 
 #func get_player_id_from_server():
 #	$HTTPRequestPlayerInfo.request(SERVER_HOST + "/player/")
@@ -121,7 +130,7 @@ func _on_pause_menu_canvas_exit_game():
 func _on_player_player_dead():
 	if Globals.enemies_killed > Globals.max_score:
 		Globals.max_score = Globals.enemies_killed
-		set_new_max_score()
+		set_data_player_on_death()
 	$"Game over".set_score(Globals.enemies_killed)
 	$"Game over".set_max_score(Globals.max_score)
 	await get_tree().create_timer(1).timeout
@@ -129,35 +138,20 @@ func _on_player_player_dead():
 
 
 
-func _on_http_request_get_player_info_request_completed(result, response_code, headers, body):
-	var json = JSON.new()
-	var parsed_data_from_server = json.parse_string(body.get_string_from_utf8())
-#	if parsed_data_from_server != OK:
-#		print("JSON Parse Error: ", json.get_error_message(), " in ", result, " at line ", json.get_error_line())
-	var latest_save = parsed_data_from_server[-1]
+#func _on_http_request_get_player_info_request_completed(result, response_code, headers, body):
+#	var json = JSON.new()
+#	var parsed_data_from_server = json.parse_string(body.get_string_from_utf8())
+#	var latest_save = parsed_data_from_server[-1]
+#
+#	var player_position:Vector2 = Vector2(latest_save['player_x'], latest_save['player_y'])
+#	update_stats(player_position, latest_save['player_health'], 
+#	latest_save['player_scene'], latest_save['player_laser_bullets'], 
+#	latest_save['player_grenade_bullets'], latest_save['player_last_selected_skin'], 
+#	latest_save['player_has_skin'])
+#	load(Globals.global_player_scene)
 
-	var player_position:Vector2 = Vector2(latest_save['player_x'], latest_save['player_y'])
-	update_stats(player_position, latest_save['player_health'], 
-	latest_save['player_scene'], latest_save['player_laser_bullets'], 
-	latest_save['player_grenade_bullets'], latest_save['player_last_skin'])
-	load(Globals.global_player_scene)
 
 
-func _on_http_request_max_score_request_completed(result, response_code, headers, body):
-	var json = JSON.new()
-	var parsed_data_from_server = json.parse_string(body.get_string_from_utf8())
-	if response_code != 200:
-		print("JSON Parse Error: ", json.get_error_message(), " in ", result, " at line ", json.get_error_line())
-		print("START WEB SERVER !!!")
-		get_tree().quit()
-		return
-	if parsed_data_from_server.is_empty():
-		Globals.max_score = 0
-		last_id = 1
-	else:
-		var latest_save = parsed_data_from_server[-1]
-		Globals.max_score = latest_save.player_max_score
-		last_id = latest_save.id
 
 #
 func _on_pause_menu_canvas_donate():
@@ -179,9 +173,12 @@ func _on_donate_canvas_skin_2():
 	
 
 func _on_donate_canvas_skin_1():
-	await get_tree().create_timer(3).timeout 
+#	await get_tree().create_timer(3).timeout 
 	if Globals.player_has_skin == true:
 		Globals.selected_skin = 1
+		Globals.laser_count = 50
+		Globals.grenade_count = 5
+		quit_pause()
 		return
 	print("REQUEST")
 	var dict: Dictionary = {}
@@ -189,11 +186,10 @@ func _on_donate_canvas_skin_1():
 	dict['amount'] = 20 
 	last_transaction_id = generate_uuid()
 	dict['transaction_id'] = last_transaction_id
-	var url = SERVER_HOST + "/payment/"
+	var url = SERVER_HOST + PAYMENT_URL
 	var json = JSON.new()
 	var data_to_send = json.stringify(dict)
 	var headers = ["Content-Type: application/json"]
-	print(dict)
 	$HTTPRequestPayment.request(url, headers, HTTPClient.METHOD_POST, data_to_send)
 
 

@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bwy444lg70j40"]
+[gd_scene load_steps=6 format=3 uid="uid://bwy444lg70j40"]
 
 [ext_resource type="PackedScene" uid="uid://b66faf4i732d0" path="res://scenes/player.tscn" id="1_05aq4"]
 [ext_resource type="Script" path="res://scenes/level.gd" id="1_agbb1"]
-[ext_resource type="PackedScene" uid="uid://c6ughq30xr0fc" path="res://scenes/UI.tscn" id="3_di8q7"]
 [ext_resource type="PackedScene" uid="uid://3dd11g371hii" path="res://scenes/pause_menu.tscn" id="4_86mt5"]
 [ext_resource type="PackedScene" uid="uid://bvt37cgt60pyl" path="res://scenes/game_over.tscn" id="5_bnyxy"]
 [ext_resource type="PackedScene" uid="uid://cema1fx283u6h" path="res://scenes/donate_menu_canvas.tscn" id="6_y7yv0"]
@@ -27,20 +26,15 @@ position = Vector2(565, 488)
 zoom = Vector2(0.6, 0.6)
 position_smoothing_enabled = true
 
-[node name="UI" parent="." instance=ExtResource("3_di8q7")]
-process_mode = 1
-
 [node name="PauseMenuCanvas" parent="." instance=ExtResource("4_86mt5")]
 visible = false
 
 [node name="Game over" parent="." instance=ExtResource("5_bnyxy")]
 visible = false
 
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
-
 [node name="HTTPRequestPOST" type="HTTPRequest" parent="."]
 
-[node name="HTTPRequestMaxScore" type="HTTPRequest" parent="."]
+[node name="HTTPRequestPlayerData" type="HTTPRequest" parent="."]
 
 [node name="DonateCanvas" parent="." instance=ExtResource("6_y7yv0")]
 visible = false
@@ -54,15 +48,12 @@ visible = false
 [connection signal="grenade" from="Player" to="." method="_on_player_grenade"]
 [connection signal="laser" from="Player" to="." method="_on_player_laser"]
 [connection signal="player_dead" from="Player" to="." method="_on_player_player_dead"]
-[connection signal="load_button" from="UI" to="." method="_on_ui_load_button"]
-[connection signal="save_button" from="UI" to="." method="_on_ui_save_button"]
 [connection signal="donate" from="PauseMenuCanvas" to="." method="_on_pause_menu_canvas_donate"]
 [connection signal="exit_game" from="PauseMenuCanvas" to="." method="_on_pause_menu_canvas_exit_game"]
 [connection signal="load_game" from="PauseMenuCanvas" to="." method="_on_pause_menu_canvas_load_game"]
 [connection signal="save_game" from="PauseMenuCanvas" to="." method="_on_pause_menu_canvas_save_game"]
 [connection signal="toggle_game_paused" from="PauseMenuCanvas" to="." method="_on_pause_menu_canvas_toggle_game_paused"]
-[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_get_player_info_request_completed"]
-[connection signal="request_completed" from="HTTPRequestMaxScore" to="." method="_on_http_request_max_score_request_completed"]
+[connection signal="request_completed" from="HTTPRequestPlayerData" to="." method="_on_http_request_player_data_request_completed"]
 [connection signal="exit_donate" from="DonateCanvas" to="." method="_on_donate_canvas_exit_donate"]
 [connection signal="skin1" from="DonateCanvas" to="." method="_on_donate_canvas_skin_1"]
 [connection signal="skin2" from="DonateCanvas" to="." method="_on_donate_canvas_skin_2"]

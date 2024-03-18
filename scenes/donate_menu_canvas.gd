@@ -6,7 +6,8 @@ signal exit_donate
 	
 
 func _ready():
-	if Globals.player_has_skin:
+	await get_tree().create_timer(1).timeout
+	if Globals.player_has_skin == true:
 		$Control/Panel/VBoxContainer/skin1.text = 'ПРИДБАНО'
 	
 
