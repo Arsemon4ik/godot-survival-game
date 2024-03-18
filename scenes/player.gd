@@ -41,7 +41,10 @@ func _physics_process(delta):
 		can_laser = false
 		$ShotParticles.emitting = true
 		
-		$Timer.start()
+		if Globals.selected_skin == 0:
+			$Timer.start()
+		else:
+			$Timer.start(0.2)
 		laser.emit(selected_marker.global_position, player_direction)
 		
 	# right mouse clicked event

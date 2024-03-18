@@ -4,6 +4,10 @@ signal skin1
 signal skin2
 signal exit_donate
 	
+
+func _ready():
+	if Globals.player_has_skin:
+		$Control/Panel/VBoxContainer/skin1.text = 'ПРИДБАНО'
 	
 
 func _on_skin_1_pressed():

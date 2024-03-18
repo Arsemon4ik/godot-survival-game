@@ -49,7 +49,7 @@ visible = false
 
 [node name="HTTPRequestCheckPayment" type="HTTPRequest" parent="."]
 
-[node name="HTTPRequestCheckSkin" type="HTTPRequest" parent="."]
+[node name="HTTPRequestPlayerInfo" type="HTTPRequest" parent="."]
 
 [connection signal="grenade" from="Player" to="." method="_on_player_grenade"]
 [connection signal="laser" from="Player" to="." method="_on_player_laser"]
@@ -68,4 +68,3 @@ visible = false
 [connection signal="skin2" from="DonateCanvas" to="." method="_on_donate_canvas_skin_2"]
 [connection signal="request_completed" from="HTTPRequestPayment" to="." method="_on_http_request_payment_request_completed"]
 [connection signal="request_completed" from="HTTPRequestCheckPayment" to="." method="_on_http_request_check_payment_request_completed"]
-[connection signal="request_completed" from="HTTPRequestCheckSkin" to="." method="_on_http_request_check_skin_request_completed"]

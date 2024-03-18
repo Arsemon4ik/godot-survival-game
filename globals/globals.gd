@@ -6,6 +6,8 @@ signal enemy_killed
 
 var player_hit_sound: AudioStreamPlayer2D
 
+var player_has_skin: bool = false
+
 var selected_skin: int = 0:
 	set(value):
 		selected_skin = value
@@ -23,7 +25,7 @@ var grenade_count: int = 3:
 
 var player_vulnerable: bool = true
 
-var health: int = 20:
+var health: int = 100:
 	set(value):
 		if value > health:
 			health = min(value, 100)
