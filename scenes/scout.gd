@@ -40,7 +40,6 @@ func _on_attack_state_processing(delta):
 	look_at(Globals.global_player_position)
 
 	if can_laser:
-		print(Globals.global_player_position)
 		var marker_node = $LaserSpawnPositions.get_child(right_gun_shoot)
 		right_gun_shoot = not right_gun_shoot
 		var laser_pos: Vector2 = marker_node.global_position

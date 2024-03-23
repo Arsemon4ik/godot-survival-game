@@ -54,6 +54,7 @@ layout_mode = 2
 text = "Save"
 
 [node name="LoadBtn" type="Button" parent="PauseMenu/Panel/VBoxContainer"]
+visible = false
 self_modulate = Color(0.231373, 0.392157, 0, 1)
 layout_mode = 2
 text = "Load"
@@ -61,10 +62,10 @@ text = "Load"
 [node name="ExitBtn" type="Button" parent="PauseMenu/Panel/VBoxContainer"]
 self_modulate = Color(0.862745, 0, 0.286275, 1)
 layout_mode = 2
-text = "Exit
-"
+text = "Menu"
 
 [node name="donate" type="Button" parent="PauseMenu/Panel/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "DONATE"
 

@@ -25,13 +25,11 @@ func _on_save_btn_pressed():
 	save_game.emit()
 
 
-func _on_load_btn_pressed():
-	load_game.emit()
-
-
 func _on_exit_btn_pressed():
-	exit_game.emit()
+	game_paused = false
+	TransitionLayer.change_scene('res://scenes/main_menu_canvas.tscn')
 
 
-func _on_donate_pressed():
-	donate.emit()
+
+#func _on_donate_pressed():
+#	donate.emit()

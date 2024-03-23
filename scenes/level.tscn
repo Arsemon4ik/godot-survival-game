@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://bwy444lg70j40"]
+[gd_scene load_steps=5 format=3 uid="uid://bwy444lg70j40"]
 
 [ext_resource type="PackedScene" uid="uid://b66faf4i732d0" path="res://scenes/player.tscn" id="1_05aq4"]
 [ext_resource type="Script" path="res://scenes/level.gd" id="1_agbb1"]
 [ext_resource type="PackedScene" uid="uid://3dd11g371hii" path="res://scenes/pause_menu.tscn" id="4_86mt5"]
-[ext_resource type="PackedScene" uid="uid://bvt37cgt60pyl" path="res://scenes/game_over.tscn" id="5_bnyxy"]
 [ext_resource type="PackedScene" uid="uid://cema1fx283u6h" path="res://scenes/donate_menu_canvas.tscn" id="6_y7yv0"]
 
 [node name="Level" type="Node2D"]
@@ -27,9 +26,6 @@ zoom = Vector2(0.6, 0.6)
 position_smoothing_enabled = true
 
 [node name="PauseMenuCanvas" parent="." instance=ExtResource("4_86mt5")]
-visible = false
-
-[node name="Game over" parent="." instance=ExtResource("5_bnyxy")]
 visible = false
 
 [node name="HTTPRequestPOST" type="HTTPRequest" parent="."]

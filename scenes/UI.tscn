@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dbs8vfhvcgtie" path="res://scenes/fps_counter.tscn" id="8_2f3po"]
 
 [node name="UI" type="CanvasLayer"]
+visible = false
 script = ExtResource("1_4rsq7")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]

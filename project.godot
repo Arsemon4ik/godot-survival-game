@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="godot_survival_game_2d"
-run/main_scene="res://scenes/inside.tscn"
+run/main_scene="res://scenes/main_menu_canvas.tscn"
 config/features=PackedStringArray("4.1", "Mobile")
 config/icon="res://icon.svg"
 
@@ -19,8 +19,8 @@ config/icon="res://icon.svg"
 
 Globals="*res://globals/globals.gd"
 Ui="*res://scenes/UI.tscn"
-TransitionLayer="*res://scenes/transition_layer.tscn"
 Music="*res://globals/music.tscn"
+TransitionLayer="*res://scenes/transition_layer.tscn"
 
 [display]
 

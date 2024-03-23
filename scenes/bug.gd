@@ -31,7 +31,6 @@ func _process(_delta):
 		look_at(Globals.global_player_position)
 
 func _on_attack_area_body_entered(_body):
-	print("PLAYER HERE")
 	player_nearby = true
 	$AnimatedSprite2D.play("attack")
 

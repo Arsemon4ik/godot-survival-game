@@ -18,5 +18,4 @@ func _process(_delta):
 			var in_range = target.global_position.distance_to(global_position) < explosion_radius
 			
 			if "hit" in target and in_range:
-				print(target)
 				target.hit()

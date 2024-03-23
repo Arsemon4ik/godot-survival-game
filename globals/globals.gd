@@ -39,7 +39,6 @@ var health: int = 100:
 		
 var enemies_killed: int = 0:
 	set(value):
-		print(value)
 		enemies_killed = value
 		enemy_killed.emit()
 
@@ -55,6 +54,9 @@ var global_player_position: Vector2
 var global_player_scene: String:
 	set(value):
 		global_player_scene = value
+		
+var game_started: bool = false
+var last_id: int = 0;
 
 func _ready():
 	player_hit_sound = AudioStreamPlayer2D.new()

@@ -160,7 +160,7 @@ position = Vector2(-566, -5991)
 collision_layer = 2
 collision_mask = 15
 
-[node name="HTTPRequest" type="HTTPRequest" parent="." index="16"]
+[node name="HTTPRequest" type="HTTPRequest" parent="." index="15"]
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_player_data_request_completed"]

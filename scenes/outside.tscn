@@ -63,7 +63,11 @@ shape = SubResource("RectangleShape2D_vm7hl")
 position = Vector2(594, 498)
 collision_mask = 15
 
+[node name="PauseMenuCanvas" parent="." index="9"]
+process_mode = 0
+
 [node name="Enemies" type="Node2D" parent="." index="10"]
+process_mode = 1
 
 [node name="Scout" parent="Enemies" index="0" instance=ExtResource("8_6fwux")]
 position = Vector2(-1079, 919)
@@ -81,6 +85,7 @@ collision_mask = 15
 position = Vector2(-387, 1736)
 
 [node name="CarPath" type="Path2D" parent="." index="11"]
+process_mode = 1
 position = Vector2(-313, 2099)
 scale = Vector2(1.0246, 0.915302)
 curve = SubResource("Curve2D_i5o7i")
